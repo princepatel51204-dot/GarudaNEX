@@ -1,0 +1,21 @@
+waypoints:
+- name: home
+  x: 0.022
+  y: -0.085
+  yaw: -0.102
+- name: aisle_east_1
+  x: 4.22
+  y: -0.937
+  yaw: -0.093
+- name: aisle_east_2
+  x: 10.98
+  y: -2.905
+  yaw: 2.373
+- name: bay_north
+  x: 6.686
+  y: 8.332
+  yaw: 1.629
+- name: bay_south
+  x: 3.063
+  y: -9.614
+  yaw: 1.728
