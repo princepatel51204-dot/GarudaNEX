@@ -12,3 +12,14 @@ garudanex_odom_bridge:
     # downstream filter that inverts the covariance produce NaN.
     pose_covariance_floor: 0.0001
     twist_covariance_floor: 0.0001
+
+garudanex_cmd_vel_bridge:
+  ros__parameters:
+    cruise_altitude: 2.5      # m AGL, held as a Z position setpoint
+    max_xy_velocity: 1.5      # m/s. Low limits keep tilt small, which keeps
+    max_yaw_rate: 0.8         # rad/s   the 2D LiDAR scan near-planar.
+    cmd_timeout: 0.5          # s without /cmd_vel -> hover
+    setpoint_rate: 20.0       # Hz. PX4 drops offboard below ~2 Hz.
+    altitude_kp: 1.0          # P gain on altitude error -> Z velocity
+    max_z_velocity: 1.0       # m/s climb/descent clamp
+    stamped_cmd_vel: false    # Nav2 on Jazzy publishes Twist; Kilted+ TwistStamped

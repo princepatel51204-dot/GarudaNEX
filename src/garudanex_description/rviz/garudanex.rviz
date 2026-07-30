@@ -1,102 +1,293 @@
 Panels:
   - Class: rviz_common/Displays
+    Help Height: 70
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
-    Tree Height: 600
+      Expanded:
+        - /Status1
+        - /Grid1
+        - /TF1
+        - /RobotModel1
+        - /LaserScan1
+        - /Odometry1
+      Splitter Ratio: 0.5
+    Tree Height: 783
 Visualization Manager:
   Class: ""
-  Name: root
   Displays:
-    - Class: rviz_default_plugins/Grid
-      Name: Grid
+    - Alpha: 0.4000000059604645
+      Cell Size: 1
+      Class: rviz_default_plugins/Grid
+      Color: 100; 100; 100
       Enabled: true
-      Reference Frame: <Fixed Frame>
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
       Plane: XY
       Plane Cell Count: 40
-      Cell Size: 1
-      Color: 100; 100; 100
-      Alpha: 0.4
+      Reference Frame: <Fixed Frame>
+      Value: true
     - Class: rviz_default_plugins/TF
+      Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        base_link_frd:
+          Value: true
+        camera_link:
+          Value: true
+        camera_link_optical:
+          Value: true
+        gps_link:
+          Value: true
+        imu_link:
+          Value: true
+        lidar_link:
+          Value: true
+        odom:
+          Value: true
+        rotor_1_link:
+          Value: true
+        rotor_2_link:
+          Value: true
+        rotor_3_link:
+          Value: true
+        rotor_4_link:
+          Value: true
+      Marker Scale: 0.4000000059604645
       Name: TF
-      Enabled: true
-      Show Names: true
-      Show Axes: true
       Show Arrows: false
-      Marker Scale: 0.4
+      Show Axes: true
+      Show Names: true
+      Tree:
+        odom:
+          base_link:
+            base_link_frd:
+              {}
+            camera_link:
+              camera_link_optical:
+                {}
+            gps_link:
+              {}
+            imu_link:
+              {}
+            lidar_link:
+              {}
+            rotor_1_link:
+              {}
+            rotor_2_link:
+              {}
+            rotor_3_link:
+              {}
+            rotor_4_link:
+              {}
       Update Interval: 0
-    - Class: rviz_default_plugins/RobotModel
-      Name: RobotModel
-      Enabled: true
-      Visual Enabled: true
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
-      Alpha: 1
+      Description File: ""
       Description Source: Topic
       Description Topic:
-        Value: /robot_description
         Depth: 5
+        Durability Policy: Transient Local
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Durability Policy: Transient Local
-    - Class: rviz_default_plugins/LaserScan
-      Name: LaserScan
+        Value: /robot_description
       Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_link_frd:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_link_optical:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        gps_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        lidar_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rotor_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rotor_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rotor_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rotor_4_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/LaserScan
+      Color: 255; 70; 70
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: LaserScan
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 4
+      Size (m): 0.009999999776482582
+      Style: Points
       Topic:
-        Value: /scan
         Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Durability Policy: Volatile
-      Style: Points
-      Size (Pixels): 4
-      Color Transformer: FlatColor
-      Color: 255; 70; 70
-      Alpha: 1
-      Decay Time: 0
-    - Class: rviz_default_plugins/Odometry
-      Name: Odometry
+        Value: /scan
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Angle Tolerance: 0.05000000074505806
+      Class: rviz_default_plugins/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
       Enabled: true
-      Topic:
-        Value: /odom
-        Depth: 5
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Durability Policy: Volatile
       Keep: 1
-      Position Tolerance: 0.05
-      Angle Tolerance: 0.05
+      Name: Odometry
+      Position Tolerance: 0.05000000074505806
       Shape:
         Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
         Color: 60; 180; 240
-        Shaft Length: 0.4
-        Shaft Radius: 0.04
-        Head Length: 0.15
-        Head Radius: 0.08
+        Head Length: 0.15000000596046448
+        Head Radius: 0.07999999821186066
+        Shaft Length: 0.4000000059604645
+        Shaft Radius: 0.03999999910593033
+        Value: Arrow
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /odom
+      Value: true
+  Enabled: true
   Global Options:
     Background Color: 40; 40; 42
     Fixed Frame: odom
     Frame Rate: 30
+  Name: root
   Tools:
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/FocusCamera
     - Class: rviz_default_plugins/Measure
       Line color: 128; 128; 0
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Name: Current View
-      Distance: 30
-      Pitch: 0.9
-      Yaw: 0.8
+      Distance: 4.80064582824707
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
       Focal Point:
         X: 0
         Y: 0
         Z: 0
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.2399999499320984
       Target Frame: <Fixed Frame>
-      Near Clip Distance: 0.01
+      Value: Orbit (rviz_default_plugins)
+      Yaw: 2.265016555786133
     Saved: ~
 Window Geometry:
-  Height: 900
-  Width: 1400
   Displays:
     collapsed: false
+  Height: 1011
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd00000001000000000000015600000395fc0200000001fb000000100044006900730070006c006100790073010000003f00000395000000cc00ffffff000005e20000039500000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Width: 1854
+  X: 66
+  Y: 32

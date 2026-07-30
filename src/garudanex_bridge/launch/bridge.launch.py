@@ -29,4 +29,12 @@ def generate_launch_description():
             parameters=[params, {'use_sim_time': use_sim_time}],
             emulate_tty=True,
         ),
+        Node(
+            package='garudanex_bridge',
+            executable='cmd_vel_bridge_node',
+            name='garudanex_cmd_vel_bridge',
+            output='screen',
+            parameters=[params, {'use_sim_time': use_sim_time}],
+            emulate_tty=True,
+        ),
     ])

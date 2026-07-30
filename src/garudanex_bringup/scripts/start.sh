@@ -3,14 +3,8 @@
 #
 #   ./start.sh [world]        default world: walls
 #
-# Windows:
-#   px4    PX4 SITL + Gazebo (interactive pxh> prompt)
-#   ros    uXRCE-DDS agent + gz bridge + relay + description + odom bridge
-#   rviz   RViz2 with the GarudaNEX config
-#   shell  free shell, workspace already sourced
-#
-# Detach: Ctrl-b d      Switch window: Ctrl-b <number>
-# Kill everything: tmux kill-session -t garudanex
+# Windows:  0:px4  1:ros  2:rviz  3:shell
+# Detach Ctrl-b d | switch Ctrl-b <n> | kill: ./stop.sh
 set -euo pipefail
 
 SESSION="garudanex"
@@ -20,34 +14,38 @@ WORLD="${1:-walls}"
 AIRFRAME="gz_x500_lidar_2d"
 RVIZ_CFG="${WS}/src/garudanex_description/rviz/garudanex.rviz"
 SRC="source /opt/ros/jazzy/setup.bash && source ${WS}/install/setup.bash"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Clean slate: stale processes are the #1 cause of duplicate-publisher bugs.
-tmux has-session -t "$SESSION" 2>/dev/null && tmux kill-session -t "$SESSION"
-pkill -f MicroXRCEAgent    2>/dev/null || true
-pkill -f parameter_bridge  2>/dev/null || true
-pkill -f odometry_bridge   2>/dev/null || true
-pkill -f scan_frame_relay  2>/dev/null || true
-pkill -f robot_state_publisher 2>/dev/null || true
-sleep 1
+# Full clean first. Zombie Gazebo servers cause the model to spawn into a
+# stale world and immediately trip the roll failure detector.
+"${HERE}/stop.sh"
 
-tmux new-session  -d -s "$SESSION" -n px4
+tmux new-session -d -s "$SESSION" -n px4
 tmux send-keys -t "$SESSION:px4" \
   "cd ${PX4_DIR} && PX4_GZ_WORLD=${WORLD} make px4_sitl ${AIRFRAME}" C-m
 
-# T+18s: PX4 and Gazebo need to be up before the DDS agent and /clock bridge.
+# Wait for Gazebo to actually be serving /clock, rather than guessing a sleep.
 tmux new-window -t "$SESSION" -n ros
 tmux send-keys -t "$SESSION:ros" \
-  "${SRC} && sleep 18 && ros2 launch garudanex_bringup garudanex_sitl.launch.py world:=${WORLD}" C-m
+  "${SRC} && \
+   printf 'waiting for Gazebo /clock'; \
+   for i in \$(seq 1 60); do gz topic -l 2>/dev/null | grep -qx '/clock' && break; printf '.'; sleep 1; done; \
+   echo ' up'; sleep 3; \
+   ros2 launch garudanex_bringup garudanex_sitl.launch.py world:=${WORLD}" C-m
 
-# T+30s: RViz last, so /clock and TF already exist.
+# RViz waits for /scan, which means the whole bridge chain is alive.
 tmux new-window -t "$SESSION" -n rviz
 tmux send-keys -t "$SESSION:rviz" \
-  "${SRC} && sleep 30 && rviz2 -d ${RVIZ_CFG} --ros-args -p use_sim_time:=true" C-m
+  "${SRC} && \
+   printf 'waiting for /scan'; \
+   for i in \$(seq 1 90); do ros2 topic list 2>/dev/null | grep -qx '/scan' && break; printf '.'; sleep 1; done; \
+   echo ' up'; sleep 2; \
+   rviz2 -d ${RVIZ_CFG} --ros-args -p use_sim_time:=true" C-m
 
 tmux new-window -t "$SESSION" -n shell
 tmux send-keys -t "$SESSION:shell" "${SRC} && cd ${WS}" C-m
 
 tmux select-window -t "$SESSION:px4"
-echo "GarudaNEX starting in world '${WORLD}'. Attaching in 2s..."
+echo "GarudaNEX starting in world '${WORLD}'..."
 sleep 2
 tmux attach -t "$SESSION"

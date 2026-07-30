@@ -44,9 +44,22 @@ rclcpp_components_register_node(scan_frame_relay_component
   PLUGIN "garudanex::ScanFrameRelay"
   EXECUTABLE scan_frame_relay_node)
 
+# ---------------- cmd_vel bridge ----------------
+add_library(cmd_vel_bridge_component SHARED src/cmd_vel_bridge.cpp)
+target_include_directories(cmd_vel_bridge_component PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(cmd_vel_bridge_component Eigen3::Eigen)
+ament_target_dependencies(cmd_vel_bridge_component
+  rclcpp rclcpp_components px4_msgs geometry_msgs)
+rclcpp_components_register_node(cmd_vel_bridge_component
+  PLUGIN "garudanex::CmdVelBridge"
+  EXECUTABLE cmd_vel_bridge_node)
+
 install(TARGETS
   odometry_bridge_component
   scan_frame_relay_component
+  cmd_vel_bridge_component
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
@@ -61,7 +74,7 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories(include)
-ament_export_libraries(odometry_bridge_component scan_frame_relay_component)
+ament_export_libraries(odometry_bridge_component scan_frame_relay_component cmd_vel_bridge_component)
 ament_export_dependencies(rclcpp px4_msgs nav_msgs geometry_msgs sensor_msgs
                           tf2_ros Eigen3)
 ament_package()
