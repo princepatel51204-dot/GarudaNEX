@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>garudanex_bringup</name>
+  <version>1.0.0</version>
+  <description>
+    Top-level orchestration for GarudaNEX. Composes the uXRCE-DDS agent, the
+    Gazebo bridge, the robot description and the PX4 bridges into a single
+    launch. Depends on everything; depended on by nothing.
+  </description>
+  <maintainer email="princepatel51204@gmail.com">Prince Patel</maintainer>
+  <license>BSD-3-Clause</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>garudanex_description</exec_depend>
+  <exec_depend>garudanex_bridge</exec_depend>
+  <exec_depend>garudanex_sim</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>
