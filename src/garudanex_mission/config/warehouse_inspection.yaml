@@ -11,10 +11,6 @@ waypoints:
   x: 10.98
   y: -2.905
   yaw: 2.373
-- name: bay_north
-  x: 6.686
-  y: 8.332
-  yaw: 1.629
 - name: bay_south
   x: 3.063
   y: -9.614
