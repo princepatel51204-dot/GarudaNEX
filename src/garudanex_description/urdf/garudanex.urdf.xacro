@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="garudanex">
+
+  <xacro:include filename="$(find garudanex_description)/urdf/properties.xacro"/>
+  <xacro:include filename="$(find garudanex_description)/urdf/inertial_macros.xacro"/>
+
+  <material name="garuda_dark"><color rgba="0.15 0.15 0.18 1.0"/></material>
+  <material name="rotor_grey"><color rgba="0.60 0.60 0.60 0.55"/></material>
+  <material name="lidar_blue"><color rgba="0.10 0.35 0.75 1.0"/></material>
+  <material name="cam_black"><color rgba="0.05 0.05 0.05 1.0"/></material>
+
+  <!-- ================= BASE =================
+       base_link is FLU per REP-103: +X forward, +Y LEFT, +Z UP.
+       PX4 uses FRD internally (+Y right, +Z down). The conversion
+       happens ONCE, in the odometry bridge. Never here. -->
+  <link name="${base_frame}">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry>
+      <material name="garuda_dark"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry>
+    </collision>
+    <!-- Deliberately NO <inertial> on the root link. KDL (used by
+         robot_state_publisher) does not support inertia on the root, and
+         PX4's own SDF model owns all physics. Unused data = warnings. -->
+  </link>
+
+  <!-- ================= ROTORS =================
+       PX4 quad-X numbering: 1 front-right CCW, 2 rear-left CCW,
+       3 front-left CW, 4 rear-right CW. Angles from +X, CCW. -->
+  <xacro:macro name="rotor" params="number angle_deg spin_dir">
+    <xacro:property name="a" value="${angle_deg * PI / 180.0}"/>
+    <link name="rotor_${number}_link">
+      <visual>
+        <geometry><cylinder radius="${rotor_radius}" length="0.005"/></geometry>
+        <material name="rotor_grey"/>
+      </visual>
+      <xacro:inertial_cylinder mass="${rotor_mass}" length="0.005" radius="${rotor_radius}">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:inertial_cylinder>
+    </link>
+    <joint name="rotor_${number}_joint" type="fixed">
+      <parent link="${base_frame}"/>
+      <child  link="rotor_${number}_link"/>
+      <origin xyz="${arm_length*cos(a)} ${arm_length*sin(a)} 0.03" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:rotor number="1" angle_deg="45"  spin_dir="1"/>
+  <xacro:rotor number="2" angle_deg="225" spin_dir="1"/>
+  <xacro:rotor number="3" angle_deg="135" spin_dir="-1"/>
+  <xacro:rotor number="4" angle_deg="315" spin_dir="-1"/>
+
+  <!-- ================= 2D LIDAR ================= -->
+  <link name="${lidar_frame}">
+    <visual>
+      <geometry><cylinder radius="${lidar_radius}" length="${lidar_height}"/></geometry>
+      <material name="lidar_blue"/>
+    </visual>
+    <collision>
+      <geometry><cylinder radius="${lidar_radius}" length="${lidar_height}"/></geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="${lidar_mass}"
+                             length="${lidar_height}" radius="${lidar_radius}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <parent link="${base_frame}"/>
+    <child  link="${lidar_frame}"/>
+    <origin xyz="${lidar_x} ${lidar_y} ${lidar_z}"
+            rpy="${lidar_roll} ${lidar_pitch} ${lidar_yaw}"/>
+  </joint>
+
+  <!-- ================= IMU ================= -->
+  <link name="${imu_frame}"/>
+  <joint name="imu_joint" type="fixed">
+    <parent link="${base_frame}"/>
+    <child  link="${imu_frame}"/>
+    <origin xyz="${imu_x} ${imu_y} ${imu_z}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= CAMERA =================
+       Two frames per REP-103/105:
+         camera_link         body-aligned, +X forward
+         camera_link_optical +Z forward, +X right, +Y down (OpenCV)
+       Getting this rotation wrong is the classic
+       "my point cloud is lying on its side" bug. -->
+  <link name="${camera_frame}">
+    <visual>
+      <geometry><box size="0.03 0.06 0.03"/></geometry>
+      <material name="cam_black"/>
+    </visual>
+    <xacro:inertial_box mass="0.05" x="0.03" y="0.06" z="0.03">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_box>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <parent link="${base_frame}"/>
+    <child  link="${camera_frame}"/>
+    <origin xyz="${cam_x} ${cam_y} ${cam_z}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="${camera_frame}_optical"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="${camera_frame}"/>
+    <child  link="${camera_frame}_optical"/>
+    <origin xyz="0 0 0" rpy="${-PI/2} 0 ${-PI/2}"/>
+  </joint>
+
+  <!-- ================= GPS ================= -->
+  <link name="${gps_frame}"/>
+  <joint name="gps_joint" type="fixed">
+    <parent link="${base_frame}"/>
+    <child  link="${gps_frame}"/>
+    <origin xyz="0 0 0.08" rpy="0 0 0"/>
+  </joint>
+
+  <!-- ================= PX4 BODY FRAME (debug aid) =================
+       Expresses PX4's FRD convention as a real TF frame.
+       180 deg roll maps FLU -> FRD. Useful for eyeballing
+       conversions in RViz on Day 3. -->
+  <link name="base_link_frd"/>
+  <joint name="base_link_frd_joint" type="fixed">
+    <parent link="${base_frame}"/>
+    <child  link="base_link_frd"/>
+    <origin xyz="0 0 0" rpy="${PI} 0 0"/>
+  </joint>
+
+</robot>

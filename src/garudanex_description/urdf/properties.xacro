@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- ===== CONSTANTS ===== -->
+  <xacro:property name="PI" value="3.14159265359"/>
+
+  <!-- ===== AIRFRAME (x500 class) ===== -->
+  <xacro:property name="body_mass"    value="1.5"/>
+  <xacro:property name="body_length"  value="0.20"/>
+  <xacro:property name="body_width"   value="0.20"/>
+  <xacro:property name="body_height"  value="0.10"/>
+  <xacro:property name="arm_length"   value="0.25"/>
+  <xacro:property name="rotor_radius" value="0.127"/>
+  <xacro:property name="rotor_mass"   value="0.016"/>
+
+  <!-- Nav2 inscribed radius: prop envelope + safety margin -->
+  <xacro:property name="robot_radius" value="0.45"/>
+
+  <!-- ===== 2D LIDAR =====
+       MEASURED from live Gazebo data 2026-07-29:
+         gz topic -e ... /sensor/lidar_2d_v2/scan
+         world_pose.position.z = 0.055
+         angle_min/max = -2.356195 / +2.356195  (270 deg FOV)
+         range 0.1 .. 30.0 m, count 1080 -->
+  <xacro:property name="lidar_x"         value="0.0"/>
+  <xacro:property name="lidar_y"         value="0.0"/>
+  <xacro:property name="lidar_z"         value="0.055"/>
+  <xacro:property name="lidar_roll"      value="0.0"/>
+  <xacro:property name="lidar_pitch"     value="0.0"/>
+  <xacro:property name="lidar_yaw"       value="0.0"/>
+  <xacro:property name="lidar_radius"    value="0.035"/>
+  <xacro:property name="lidar_height"    value="0.04"/>
+  <xacro:property name="lidar_mass"      value="0.17"/>
+  <xacro:property name="lidar_min_range" value="0.1"/>
+  <xacro:property name="lidar_max_range" value="30.0"/>
+  <xacro:property name="lidar_samples"   value="1080"/>
+  <xacro:property name="lidar_fov_half"  value="2.356195"/>
+
+  <!-- ===== IMU ===== -->
+  <xacro:property name="imu_x" value="0.0"/>
+  <xacro:property name="imu_y" value="0.0"/>
+  <xacro:property name="imu_z" value="0.0"/>
+
+  <!-- ===== FORWARD CAMERA ===== -->
+  <xacro:property name="cam_x" value="0.12"/>
+  <xacro:property name="cam_y" value="0.0"/>
+  <xacro:property name="cam_z" value="0.0"/>
+
+  <!-- ===== FRAME NAMES (single source of truth) ===== -->
+  <xacro:property name="base_frame"   value="base_link"/>
+  <xacro:property name="lidar_frame"  value="lidar_link"/>
+  <xacro:property name="imu_frame"    value="imu_link"/>
+  <xacro:property name="camera_frame" value="camera_link"/>
+  <xacro:property name="gps_frame"    value="gps_link"/>
+</robot>
