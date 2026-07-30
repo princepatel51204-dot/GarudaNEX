@@ -1,0 +1,14 @@
+garudanex_odom_bridge:
+  ros__parameters:
+    odom_frame: odom
+    base_frame: base_link
+    publish_tf: true
+
+    # Suppress /odom and TF while PX4 says its own estimate is invalid.
+    # Set false only to debug the raw stream - never in normal operation.
+    require_valid_estimate: true
+
+    # A variance of exactly zero means "infinitely certain" and makes any
+    # downstream filter that inverts the covariance produce NaN.
+    pose_covariance_floor: 0.0001
+    twist_covariance_floor: 0.0001

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>garudanex_bridge</name>
+  <version>1.0.0</version>
+  <description>
+    PX4 to ROS 2 coordinate frame and message bridges for GarudaNEX.
+    Converts PX4 NED/FRD state estimates to REP-103 ENU/FLU, publishes
+    nav_msgs/Odometry and the odom-to-base_link transform, and translates
+    Nav2 velocity commands into PX4 offboard trajectory setpoints.
+  </description>
+  <maintainer email="princepatel51204@gmail.com">Prince Patel</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>px4_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>eigen</depend>
+
+  <test_depend>ament_cmake_gtest</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
