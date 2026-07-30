@@ -42,7 +42,7 @@ for r, y in enumerate([4.5, 7.5, 10.5, -4.5, -7.5, -10.5]):
         box('rack_row_%d' % r, 'rack_%d_%d' % (r, i), (a+b)/2, y, b-a, RACK_D, RACK_H)
 
 # --- structural columns, flanking the main cross-aisle ----------------------
-for i, px in enumerate([-14.0, -6.0, 2.0, 10.0, 17.0]):
+for i, px in enumerate([-14.0, -6.0, 6.0, 12.0, 17.0]):
     for j, py in enumerate([-2.4, 2.4]):
         box('columns', 'col_%d_%d' % (i, j), px, py, 0.4, 0.4, WH)
 
