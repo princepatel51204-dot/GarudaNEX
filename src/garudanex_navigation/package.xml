@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>garudanex_navigation</name>
+  <version>1.0.0</version>
+  <description>
+    SLAM Toolbox and Nav2 configuration for GarudaNEX. Contains no code:
+    the upstream packages provide the executables, this package provides the
+    tuning, the behaviour tree and the saved maps.
+  </description>
+  <maintainer email="princepatel51204@gmail.com">Prince Patel</maintainer>
+  <license>BSD-3-Clause</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>slam_toolbox</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>nav2_map_server</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>

@@ -15,7 +15,7 @@ garudanex_odom_bridge:
 
 garudanex_cmd_vel_bridge:
   ros__parameters:
-    cruise_altitude: 2.5      # m AGL, held as a Z position setpoint
+    cruise_altitude: 1.5
     max_xy_velocity: 1.5      # m/s. Low limits keep tilt small, which keeps
     max_yaw_rate: 0.8         # rad/s   the 2D LiDAR scan near-planar.
     cmd_timeout: 0.5          # s without /cmd_vel -> hover

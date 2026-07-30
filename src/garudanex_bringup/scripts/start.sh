@@ -12,6 +12,15 @@ WS="${HOME}/GarudaNEX/ros2_ws"
 PX4_DIR="${HOME}/PX4-Autopilot"
 WORLD="${1:-walls}"
 AIRFRAME="gz_x500_lidar_2d"
+
+# Spawn pose per world. The photoreal world has shelving at the origin,
+# so the drone is placed in the main aisle instead of moving the scene.
+case "$WORLD" in
+  garudanex_warehouse_hq) SPAWN="${2:-0,4,0.15,0,0,0}" ;;
+  *)                      SPAWN="${2:-}" ;;
+esac
+PX4_ENV="PX4_GZ_WORLD=${WORLD}"
+[ -n "$SPAWN" ] && PX4_ENV="${PX4_ENV} PX4_GZ_MODEL_POSE=${SPAWN}"
 RVIZ_CFG="${WS}/src/garudanex_description/rviz/garudanex.rviz"
 SRC="source /opt/ros/jazzy/setup.bash && source ${WS}/install/setup.bash"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,7 +31,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 tmux new-session -d -s "$SESSION" -n px4
 tmux send-keys -t "$SESSION:px4" \
-  "cd ${PX4_DIR} && PX4_GZ_WORLD=${WORLD} make px4_sitl ${AIRFRAME}" C-m
+  "cd ${PX4_DIR} && ${PX4_ENV} make px4_sitl ${AIRFRAME}" C-m
 
 # Wait for Gazebo to actually be serving /clock, rather than guessing a sleep.
 tmux new-window -t "$SESSION" -n ros

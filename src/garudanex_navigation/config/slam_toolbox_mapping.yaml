@@ -1,0 +1,96 @@
+# SLAM Toolbox - GarudaNEX mapping mode.
+#
+# Tuned against the MEASURED sensor, not defaults:
+#   270 deg FOV (-2.356 .. +2.356 rad), 0.1 .. 30.0 m, 1080 beams, 30 Hz
+#
+# The 270 deg FOV leaves a 90 deg blind wedge behind the aircraft. Practical
+# consequence: scan matching is weakest when reversing into already-mapped
+# space, and loop closure fires most reliably when re-entering a region facing
+# the same way it was first mapped.
+
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+
+    # ===== Solver =====
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    # HuberLoss downweights outlier constraints. Important on a multirotor:
+    # scans captured during an attitude excursion are genuinely bad data, and
+    # a quadratic loss would let them drag the whole pose graph.
+    ceres_loss_function: HuberLoss
+
+    # ===== Frames and topics =====
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_link
+    scan_topic: /scan
+    mode: mapping
+
+    # ===== Rates =====
+    # Your LiDAR runs at 30 Hz. throttle_scans: 3 processes every third scan
+    # (~10 Hz effective), which is ample for a drone at 1.5 m/s and saves
+    # roughly two thirds of the scan-matching cost on Iris Xe graphics.
+    throttle_scans: 3
+    transform_publish_period: 0.02      # 50 Hz republish of map->odom
+    map_update_interval: 2.0            # s between occupancy-grid regenerations
+    resolution: 0.05                    # m/cell
+    max_laser_range: 30.0               # MEASURED. The common 12.0 default
+                                        # would silently discard 60% of your
+                                        # range data.
+    minimum_time_interval: 0.2
+    transform_timeout: 0.2
+    tf_buffer_duration: 30.0
+    stack_size_to_use: 40000000
+    enable_interactive_mode: true
+
+    # ===== Motion thresholds =====
+    # A graph node is added only after this much movement. Too small and the
+    # graph explodes; too large and detail and loop-closure chances are lost.
+    minimum_travel_distance: 0.3        # m
+    minimum_travel_heading: 0.3         # rad
+
+    # ===== Scan matching =====
+    use_scan_matching: true
+    use_scan_barycenter: true
+    scan_buffer_size: 20
+    scan_buffer_maximum_scan_distance: 30.0
+    link_match_minimum_response_fine: 0.15
+    link_scan_maximum_distance: 2.0
+
+    # ===== Loop closure =====
+    # A FALSE loop closure is the worst SLAM failure: the map stays internally
+    # consistent but fuses two different places. If the map ever folds on
+    # itself, raise loop_match_minimum_response_fine toward 0.55 and reduce
+    # loop_search_maximum_distance.
+    do_loop_closing: true
+    loop_search_maximum_distance: 4.0
+    loop_match_minimum_chain_size: 8
+    loop_match_maximum_variance_coarse: 3.0
+    loop_match_minimum_response_coarse: 0.35
+    loop_match_minimum_response_fine: 0.45
+
+    # ===== Correlation search window =====
+    # Bigger window = robust to more odometry drift, quadratically more CPU.
+    # PX4 EKF2 odometry is good (4.6 cm vs ground truth), so 0.5 m is plenty.
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1
+    loop_search_space_dimension: 8.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # ===== Matcher penalties =====
+    # How much to trust odometry vs the scan match. Your odometry is accurate,
+    # so moderate trust - but not so much that SLAM cannot correct real drift.
+    distance_variance_penalty: 0.5
+    angle_variance_penalty: 1.0
+    fine_search_angle_offset: 0.00349
+    coarse_search_angle_offset: 0.349
+    coarse_angle_resolution: 0.0349
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: true

@@ -54,8 +54,6 @@ Visualization Manager:
           Value: true
         lidar_link:
           Value: true
-        odom:
-          Value: true
         rotor_1_link:
           Value: true
         rotor_2_link:
@@ -70,27 +68,7 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            base_link_frd:
-              {}
-            camera_link:
-              camera_link_optical:
-                {}
-            gps_link:
-              {}
-            imu_link:
-              {}
-            lidar_link:
-              {}
-            rotor_1_link:
-              {}
-            rotor_2_link:
-              {}
-            rotor_3_link:
-              {}
-            rotor_4_link:
-              {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -261,7 +239,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 4.80064582824707
+      Distance: 2.873059034347534
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1

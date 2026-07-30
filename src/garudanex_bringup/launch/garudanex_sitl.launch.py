@@ -15,6 +15,7 @@ first /fmu/out message and then triggers downstream activation.
 from launch import LaunchDescription
 from launch.actions import (DeclareLaunchArgument, ExecuteProcess,
                             IncludeLaunchDescription, TimerAction)
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -27,10 +28,13 @@ def generate_launch_description():
     pkg_sim    = FindPackageShare('garudanex_sim')
     pkg_desc   = FindPackageShare('garudanex_description')
     pkg_bridge = FindPackageShare('garudanex_bridge')
+    pkg_nav    = FindPackageShare('garudanex_navigation')
 
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
         DeclareLaunchArgument('world', default_value='walls'),
+        DeclareLaunchArgument('slam', default_value='true',
+                              description='Run SLAM Toolbox in mapping mode'),
 
         # T+0: DDS agent and the Gazebo bridge (which produces /clock).
         ExecuteProcess(
@@ -57,6 +61,17 @@ def generate_launch_description():
                     PathJoinSubstitution([pkg_bridge, 'launch',
                                           'bridge.launch.py'])),
                 launch_arguments={'use_sim_time': use_sim_time}.items(),
+            ),
+        ]),
+
+        # T+9: SLAM. Deliberately after the bridges - it needs odom->base_link
+        # in the TF buffer and /scan flowing before its first scan callback.
+        TimerAction(period=9.0, actions=[
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution([pkg_nav, 'launch', 'slam.launch.py'])),
+                launch_arguments={'use_sim_time': use_sim_time}.items(),
+                condition=IfCondition(LaunchConfiguration('slam')),
             ),
         ]),
     ])
