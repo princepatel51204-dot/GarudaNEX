@@ -2,6 +2,8 @@ garudanex_odom_bridge:
   ros__parameters:
     odom_frame: odom
     base_frame: base_link
+    base_footprint_frame: base_footprint
+    publish_base_footprint: true
     publish_tf: true
 
     # Suppress /odom and TF while PX4 says its own estimate is invalid.

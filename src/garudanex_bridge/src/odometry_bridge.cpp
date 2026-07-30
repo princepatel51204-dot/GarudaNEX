@@ -45,6 +45,8 @@ public:
     odom_frame_      = declare_parameter<std::string>("odom_frame", "odom");
     base_frame_      = declare_parameter<std::string>("base_frame", "base_link");
     publish_tf_      = declare_parameter<bool>("publish_tf", true);
+    footprint_frame_ = declare_parameter<std::string>("base_footprint_frame", "base_footprint");
+    publish_footprint_ = declare_parameter<bool>("publish_base_footprint", true);
     require_valid_   = declare_parameter<bool>("require_valid_estimate", true);
     pose_cov_floor_  = declare_parameter<double>("pose_covariance_floor", 1e-4);
     twist_cov_floor_ = declare_parameter<double>("twist_covariance_floor", 1e-4);
@@ -230,6 +232,23 @@ private:
       tf.transform.translation.z = p_enu.z();
       tf.transform.rotation      = out.pose.pose.orientation;
       tf_broadcaster_->sendTransform(tf);
+      if (publish_footprint_) {
+        const auto & q = out.pose.pose.orientation;
+        const double yaw = std::atan2(2.0 * (q.w * q.z + q.x * q.y),
+                                      1.0 - 2.0 * (q.y * q.y + q.z * q.z));
+        geometry_msgs::msg::TransformStamped fp;
+        fp.header.stamp            = out.header.stamp;
+        fp.header.frame_id         = odom_frame_;
+        fp.child_frame_id          = footprint_frame_;
+        fp.transform.translation.x = p_enu.x();
+        fp.transform.translation.y = p_enu.y();
+        fp.transform.translation.z = 0.0;
+        fp.transform.rotation.x    = 0.0;
+        fp.transform.rotation.y    = 0.0;
+        fp.transform.rotation.z    = std::sin(yaw * 0.5);
+        fp.transform.rotation.w    = std::cos(yaw * 0.5);
+        tf_broadcaster_->sendTransform(fp);
+      }
     }
   }
 
@@ -287,8 +306,8 @@ private:
   }
 
   // ------------------------------------------------------------------ state
-  std::string odom_frame_, base_frame_;
-  bool publish_tf_{true}, require_valid_{true};
+  std::string odom_frame_, base_frame_, footprint_frame_;
+  bool publish_tf_{true}, require_valid_{true}, publish_footprint_{true};
   double pose_cov_floor_{1e-4}, twist_cov_floor_{1e-4};
 
   bool xy_valid_{false}, z_valid_{false};
