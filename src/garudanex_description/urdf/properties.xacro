@@ -32,7 +32,7 @@
   <xacro:property name="lidar_mass"      value="0.17"/>
   <xacro:property name="lidar_min_range" value="0.1"/>
   <xacro:property name="lidar_max_range" value="30.0"/>
-  <xacro:property name="lidar_samples"   value="1080"/>
+  <xacro:property name="lidar_samples"   value="540"/>
   <xacro:property name="lidar_fov_half"  value="2.356195"/>
 
   <!-- ===== IMU ===== -->
