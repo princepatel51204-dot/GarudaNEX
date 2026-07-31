@@ -19,6 +19,9 @@ case "$WORLD" in
   garudanex_warehouse_hq) SPAWN="${2:-0,4,0.15,0,0,0}" ;;
   *)                      SPAWN="${2:-}" ;;
 esac
+# Our models dir goes FIRST so garudanex_sim/models/lidar_2d_v2 (16-beam 3D)
+# shadows PX4's planar sensor of the same name. Gazebo takes the first match.
+export GZ_SIM_RESOURCE_PATH="${WS}/src/garudanex_sim/models:${GZ_SIM_RESOURCE_PATH}"
 PX4_ENV="PX4_GZ_WORLD=${WORLD}"
 [ -n "$SPAWN" ] && PX4_ENV="${PX4_ENV} PX4_GZ_MODEL_POSE=${SPAWN}"
 RVIZ_CFG="${WS}/src/garudanex_description/rviz/garudanex.rviz"

@@ -10,6 +10,9 @@ Panels:
         - /RobotModel1
         - /LaserScan1
         - /Odometry1
+        - /MarkerArray1
+        - /MarkerArray1/Status1
+        - /MarkerArray1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 783
 Visualization Manager:
@@ -31,7 +34,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 40
-      Reference Frame: <Fixed Frame>
+      Reference Frame: map
       Value: true
     - Class: rviz_default_plugins/TF
       Enabled: true
@@ -251,6 +254,18 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /odom
       Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray
+      Namespaces:
+        frontiers: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /garudanex/frontiers
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 40; 40; 42
@@ -269,7 +284,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.0015735194319859147
+      Distance: 24.399831771850586
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -284,10 +299,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4049990475177765
+      Pitch: 0.2849991023540497
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz_default_plugins)
-      Yaw: 3.000046491622925
+      Yaw: 3.518233060836792
     Saved: ~
 Window Geometry:
   Displays:

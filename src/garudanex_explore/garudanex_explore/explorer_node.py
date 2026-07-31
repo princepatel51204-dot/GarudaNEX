@@ -18,6 +18,7 @@ from collections import deque
 
 import numpy as np
 import rclpy
+from action_msgs.msg import GoalStatus
 from rclpy.node import Node
 from rclpy.action import ActionClient
 from rclpy.executors import MultiThreadedExecutor
@@ -238,8 +239,11 @@ class Explorer(Node):
                 h.cancel_goal_async()
                 return False, why
             time.sleep(0.2)
-        code = res.result().result.error_code
-        return code == 0, 'error_code=%d' % code
+        r = res.result()
+        # Nav2 returns error_code 0 even on ABORTED - the action status
+        # is the only reliable success signal.
+        ok = (r.status == GoalStatus.STATUS_SUCCEEDED)
+        return ok, 'status=%d error_code=%d' % (r.status, r.result.error_code)
 
     def run(self):
         self.state = 'WAIT_STACK'
@@ -309,7 +313,8 @@ def main():
     except KeyboardInterrupt:
         pass
     finally:
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':
