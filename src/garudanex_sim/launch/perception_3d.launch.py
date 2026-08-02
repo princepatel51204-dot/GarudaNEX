@@ -35,7 +35,7 @@ def generate_launch_description():
             'min_height': -0.15, 'max_height': 0.15,
             'angle_min': -3.14159, 'angle_max': 3.14159,
             'angle_increment': 0.0174533,
-            'range_min': 0.15, 'range_max': 30.0,
+            'range_min': 0.55, 'range_max': 30.0,
             'scan_time': 0.1,
         }],
         remappings=[('cloud_in', '/points_raw'), ('scan', '/scan')],
