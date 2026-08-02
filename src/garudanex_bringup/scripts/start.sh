@@ -54,6 +54,15 @@ tmux send-keys -t "$SESSION:rviz" \
    echo ' up'; sleep 2; \
    rviz2 -d ${RVIZ_CFG} --ros-args -p use_sim_time:=true" C-m
 
+# 3D perception: point cloud bridge, flattened scan for SLAM, Octomap.
+tmux new-window -t "$SESSION" -n perc
+tmux send-keys -t "$SESSION:perc" \
+  "${SRC} && \
+   printf 'waiting for /scan chain'; \
+   for i in \$(seq 1 90); do ros2 topic list 2>/dev/null | grep -qx '/clock' && break; printf '.'; sleep 1; done; \
+   echo ' up'; sleep 3; \
+   ros2 launch garudanex_sim perception_3d.launch.py world:=${WORLD}" C-m
+
 tmux new-window -t "$SESSION" -n shell
 tmux send-keys -t "$SESSION:shell" "${SRC} && cd ${WS}" C-m
 

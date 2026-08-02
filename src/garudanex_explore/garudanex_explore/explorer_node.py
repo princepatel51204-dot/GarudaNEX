@@ -71,8 +71,8 @@ def dilate_n(a, n):
 class Explorer(Node):
     def __init__(self):
         super().__init__('garudanex_explorer')
-        self.declare_parameter('min_frontier_cells', 25)
-        self.declare_parameter('clearance_m', 0.65)
+        self.declare_parameter('min_frontier_cells', 15)
+        self.declare_parameter('clearance_m', 0.35)
         self.declare_parameter('distance_weight', 0.5)
         self.declare_parameter('area_weight', 0.010)
         self.declare_parameter('goal_timeout', 90.0)
