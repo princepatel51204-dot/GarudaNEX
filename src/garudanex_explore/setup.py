@@ -24,6 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'run_recorder = garudanex_explore.run_recorder:main',
+            'smart_explorer = garudanex_explore.smart_explorer:main',
             'explorer = garudanex_explore.explorer_node:main',
         ],
     },

@@ -78,7 +78,7 @@ class Explorer(Node):
         self.declare_parameter('goal_timeout', 90.0)
         self.declare_parameter('max_failures', 2)
         self.declare_parameter('blacklist_radius', 1.5)
-        self.declare_parameter('min_goal_distance', 2.5)
+        self.declare_parameter('min_goal_distance', 1.5)
         self.declare_parameter('slam_stale_limit', 3.0)
         self.declare_parameter('dry_runs_to_finish', 3)
         self.declare_parameter('return_home', True)
@@ -91,6 +91,7 @@ class Explorer(Node):
         self.timeout = g('goal_timeout')
         self.max_fail = g('max_failures')
         self.bl_radius = g('blacklist_radius')
+        self.min_dist = g('min_goal_distance')
         self.stale_limit = g('slam_stale_limit')
         self.dry_target = g('dry_runs_to_finish')
         self.rth = g('return_home')
@@ -258,12 +259,34 @@ class Explorer(Node):
                 break
             self.get_logger().warn('waiting: %s' % (why or 'no /map yet'))
             time.sleep(1.0)
+        # slam_toolbox needs minimum_travel_distance of motion before it adds
+        # pose-graph nodes. A drone hovering at spawn produces a single
+        # unprocessed scan, so the first frontier scan sees an empty map and
+        # exploration terminates immediately. Nudge first to seed SLAM.
+        from geometry_msgs.msg import Twist
+        pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        t = Twist(); t.linear.x = 0.5
+        self.get_logger().info('bootstrap: seeding SLAM with 4 s of motion')
+        t0 = time.time()
+        while time.time() - t0 < 4.0:
+            pub.publish(t); time.sleep(0.05)
+        pub.publish(Twist()); time.sleep(2.0)
         self.home, _ = self.pose()
         self.get_logger().info('home = (%.2f, %.2f)' % (self.home[0], self.home[1]))
 
         fails, dry = {}, 0
         while dry < self.dry_target and not self.abort:
-            cands = [(p, n) for p, n in self.frontiers() if not self.blacklisted(p)]
+            here, _ = self.pose()
+            if here is None:
+                time.sleep(0.5)
+                continue
+            # Frontiers nearer than min_goal_distance sit inside Nav2's goal
+            # tolerance, so it reports SUCCEEDED without the vehicle moving.
+            # The map then never changes and the same frontier is re-selected
+            # forever - the classic frontier-exploration livelock.
+            cands = [(p, n) for p, n in self.frontiers()
+                     if not self.blacklisted(p)
+                     and np.linalg.norm(p - here) > self.min_dist]
             if not cands:
                 dry += 1
                 self.state = 'NO_FRONTIERS (%d/%d)' % (dry, self.dry_target)
@@ -272,7 +295,6 @@ class Explorer(Node):
                 time.sleep(2.0)
                 continue
             dry = 0
-            here, _ = self.pose()
             best = max(cands, key=lambda c: c[1] * self.warea - self.wdist * np.linalg.norm(c[0] - here))
             self.publish_markers(cands, best[0])
             self.state = 'GOTO (%.1f, %.1f) | %d cells | %d frontiers | visited %d' % (

@@ -32,7 +32,7 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': True,
             'target_frame': 'lidar_link',
-            'min_height': -0.15, 'max_height': 0.15,
+            'min_height': -0.25, 'max_height': 0.25,
             'angle_min': -3.14159, 'angle_max': 3.14159,
             'angle_increment': 0.0174533,
             'range_min': 0.55, 'range_max': 30.0,

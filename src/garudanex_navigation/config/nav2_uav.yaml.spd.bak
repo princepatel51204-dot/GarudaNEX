@@ -82,9 +82,9 @@ controller_server:
       yaw_goal_tolerance: 0.25
     FollowPath:
       plugin: nav2_mppi_controller::MPPIController
-      time_steps: 45
+      time_steps: 56
       model_dt: 0.05
-      batch_size: 1200
+      batch_size: 2000
       ax_max: 3.0
       ax_min: -3.0
       ay_max: 3.0
@@ -93,10 +93,10 @@ controller_server:
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 1.2
-      vx_min: -0.35
-      vy_max: 0.6
-      wz_max: 1.0
+      vx_max: 0.7
+      vx_min: -1.0
+      vy_max: 0.5
+      wz_max: 0.8
       iteration_count: 1
       prune_distance: 1.7
       transform_tolerance: 0.1
@@ -148,9 +148,9 @@ controller_server:
         collision_cost: 1000000.0
         near_goal_distance: 1.0
         trajectory_point_step: 2
-        inflation_radius: 0.6
-        cost_scaling_factor: 4.0
-        weight: 4.0
+        inflation_radius: 0.65
+        cost_scaling_factor: 3.0
+        weight: 6.0
       PathAlignCritic:
         enabled: true
         cost_power: 1
@@ -185,15 +185,15 @@ local_costmap:
       width: 3
       height: 3
       resolution: 0.05
-      robot_radius: 0.38
+      robot_radius: 0.45
       transform_tolerance: 1.0
       plugins:
       - obstacle_layer
       - inflation_layer
       inflation_layer:
         plugin: nav2_costmap_2d::InflationLayer
-        cost_scaling_factor: 4.0
-        inflation_radius: 0.6
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.65
       obstacle_layer:
         plugin: nav2_costmap_2d::ObstacleLayer
         enabled: true
@@ -225,7 +225,7 @@ global_costmap:
       publish_frequency: 1.0
       global_frame: map
       robot_base_frame: base_footprint
-      robot_radius: 0.38
+      robot_radius: 0.45
       transform_tolerance: 1.0
       resolution: 0.05
       track_unknown_space: true
@@ -252,8 +252,8 @@ global_costmap:
         map_subscribe_transient_local: true
       inflation_layer:
         plugin: nav2_costmap_2d::InflationLayer
-        cost_scaling_factor: 4.0
-        inflation_radius: 0.6
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.65
       always_send_full_costmap: true
 map_saver:
   ros__parameters:
@@ -352,21 +352,21 @@ velocity_smoother:
     scale_velocities: false
     feedback: OPEN_LOOP
     max_velocity:
-    - 1.2
-    - 0.6
-    - 1.0
+    - 0.5
+    - 0.0
+    - 2.0
     min_velocity:
-    - -0.35
-    - -0.6
-    - -1.0
+    - -0.5
+    - 0.0
+    - -2.0
     max_accel:
-    - 2.0
-    - 2.0
-    - 3.0
+    - 2.5
+    - 0.0
+    - 3.2
     max_decel:
-    - -2.0
-    - -2.0
-    - -3.0
+    - -2.5
+    - 0.0
+    - -3.2
     odom_topic: odom
     odom_duration: 0.1
     deadband_velocity:
@@ -391,8 +391,8 @@ collision_monitor:
       type: polygon
       action_type: approach
       footprint_topic: /local_costmap/published_footprint
-      time_before_collision: 0.8
-      simulation_time_step: 0.05
+      time_before_collision: 0.6
+      simulation_time_step: 0.1
       min_points: 6
       visualize: false
       enabled: true
