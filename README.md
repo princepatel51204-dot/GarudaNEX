@@ -95,6 +95,8 @@ garudanex_explore, garudanex_mission, garudanex_bringup, garudanex_description.
     ros2 run garudanex_explore smart_explorer --ros-args \
       -p use_sim_time:=true -p results_dir:=$RUN
 
+Full step-by-step procedure with verification gates: [docs/RUNBOOK.md](docs/RUNBOOK.md)
+
 ## Measurement methodology
 
 run_recorder is a standalone node, independent of the explorer, sampling at 1 Hz:
