@@ -1,5 +1,10 @@
 # GarudaNEX
 
+[![build](https://github.com/princepatel51204-dot/GarudaNEX/actions/workflows/build.yml/badge.svg)](https://github.com/princepatel51204-dot/GarudaNEX/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![ROS 2 Jazzy](https://img.shields.io/badge/ROS%202-Jazzy-22314E)
+![PX4 v1.17](https://img.shields.io/badge/PX4-v1.17-1E88E5)
+
 Autonomous GPS-denied exploration for a quadrotor UAV - ROS 2 Jazzy, PX4 SITL,
 Gazebo Harmonic. The drone is given no map, no waypoints and no operator input.
 It takes off, builds a 2D occupancy map and a 3D octree of a 60 x 40 m
