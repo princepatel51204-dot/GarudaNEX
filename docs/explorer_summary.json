@@ -1,15 +1,17 @@
 {
-  "goals_reached": 53,
+  "goals_reached": 58,
   "goals_failed": 20,
-  "early_replans": 1,
-  "blacklisted": 22,
-  "duration_s": 1647.4,
-  "unresolved_frontiers": 0,
+  "early_replans": 2,
+  "blacklisted": 12,
+  "duration_s": 1996.0,
+  "unresolved_frontiers": 7,
+  "stuck_recoveries": 0,
+  "zones_completed": 51,
   "coverage": {
-    "known_pct": 75.44,
-    "free_area_m2": 2137.3,
-    "occupied_area_m2": 106.7,
-    "map_w_m": 63.9,
-    "map_h_m": 46.6
+    "known_pct": 73.94,
+    "free_area_m2": 2131.7,
+    "occupied_area_m2": 110.1,
+    "map_w_m": 64.9,
+    "map_h_m": 46.8
   }
 }

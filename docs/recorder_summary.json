@@ -1,13 +1,13 @@
 {
-  "duration_s": 1774.5,
-  "path_length_m": 601.17,
-  "mean_speed_mps": 0.35,
-  "max_speed_mps": 3.05,
+  "duration_s": 2033.7,
+  "path_length_m": 671.15,
+  "mean_speed_mps": 0.34,
+  "max_speed_mps": 2.64,
   "closest_obstacle_m": 0.55,
   "contact_samples": 0,
   "collision_threshold_m": 0.35,
-  "final_known_pct": 75.44,
-  "free_area_m2": 2137.3,
-  "occupied_area_m2": 106.7,
-  "samples": 1740
+  "final_known_pct": 74.51,
+  "free_area_m2": 2126.3,
+  "occupied_area_m2": 110.4,
+  "samples": 1986
 }

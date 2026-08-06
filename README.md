@@ -13,12 +13,14 @@ information gain per unit of traversal cost.
 | Metric | Value |
 |---|---|
 | Environment | 60 x 40 m GPS-denied facility, 76 obstacle links |
-| Map produced | 63.9 x 46.6 m, 2137 m2 free space, 75.4% cells known |
-| Distance flown | 601 m, fully autonomous |
-| Duration | 29.6 min |
-| Goals reached | 53 / 73 (72.6%) |
-| Dead-ends auto-retired | 22 |
-| Peak speed | 3.05 m/s |
+| Map produced | 64.9 x 46.8 m, 2131 m2 free space, 74.5% cells known |
+| Distance flown | 671 m, fully autonomous |
+| Duration | 33.9 min |
+| Goals reached | 58 / 78 (74.4%) |
+| Dead-ends auto-retired | 12 |
+| Zones retired by coverage memory | 51 |
+| Stuck recoveries needed | 0 |
+| Peak speed | 2.64 m/s |
 | Closest obstacle approach | 0.55 m (LiDAR range_min) |
 | Collisions | 0 |
 | Human input after launch | none |
