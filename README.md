@@ -110,6 +110,19 @@ statistics. It writes metrics.csv incrementally and rewrites its summary every
 10 samples, so an interrupted run still yields valid data. Collision evidence is
 the minimum scan range over the run against the 0.38 m robot radius.
 
+## Continuous integration
+
+`tools/ci_validate.py` runs on every push. Beyond syntax and manifest checks it
+enforces configuration invariants that were each discovered the hard way:
+
+| Guard | Why |
+|---|---|
+| inflation_radius > robot_radius | below this MPPI has no cost gradient and the drone clips walls |
+| GridBased.allow_unknown is false | otherwise the planner routes through unmapped space into sealed rooms |
+| FollowPath.vx_max <= 1.5 | 1.8 m/s caused wall contact in 1.6 m doorways |
+| motion_model is Omni | a multirotor is not differential-drive |
+| robot_base_frame is base_footprint | the planar projection Nav2 and slam_toolbox require |
+
 ## Known limitations
 
 - 72.6% goal success; most failures are long-range goals over 30 m
