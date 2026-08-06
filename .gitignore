@@ -4,3 +4,10 @@ log/
 __pycache__/
 *.pyc
 *.bak
+
+# SLAM artefacts and recorded runs (regenerable, large)
+*.posegraph
+*.data
+src/garudanex_navigation/maps/
+runs/
+results/
