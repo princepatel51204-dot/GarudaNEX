@@ -13,6 +13,13 @@ information gain per unit of traversal cost.
 
 ![Flight path](docs/images/fig_trajectory.png)
 
+## Demo
+
+[![Watch the run](docs/images/fig_trajectory.png)](https://drive.google.com/file/d/1JNC1zzmyb7lha-aQv7NykxdP3TNV22g3/view?usp=sharing)
+
+**[Watch the full autonomous run](https://drive.google.com/file/d/1JNC1zzmyb7lha-aQv7NykxdP3TNV22g3/view?usp=sharing)** - take-off, frontier selection, 3D mapping,
+obstacle avoidance and return-to-home. No map, no waypoints, no operator input.
+
 ## Results - single unassisted run
 
 | Metric | Value |
