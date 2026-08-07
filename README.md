@@ -11,8 +11,6 @@ It takes off, builds a 2D occupancy map and a 3D octree of a 60 x 40 m
 multi-zone facility, and decides where to fly next by maximising expected
 information gain per unit of traversal cost.
 
-![Flight path](docs/images/fig_trajectory.png)
-
 ## Demo
 
 [![Watch the run](docs/images/fig_trajectory.png)](https://drive.google.com/file/d/1JNC1zzmyb7lha-aQv7NykxdP3TNV22g3/view?usp=sharing)
